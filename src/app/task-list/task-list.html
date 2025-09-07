@@ -1,16 +1,73 @@
 <div align="center">
-  <label>Enter Task: </label>
+  <h3>New Task</h3>
 
-  <br />
+  <form #taskForm="ngForm" (ngSubmit)="onSubmit(taskForm)" novalidate>
+    <table>
+      <tr>
+        <td>
+          <label>Title:</label>
+        </td>
+        <td>
+          <input
+            type="text"
+            [(ngModel)]="task.title"
+            name="title"
+            #title="ngModel"
+            required
+            minlength="3"
+          />
 
-  <input type="text" placeholder="Enter Task" [(ngModel)]="taskTitle" />
+          @if(title.invalid){ @if(title.errors?.['required'] && (title.dirty || title.touched)){
+          <div class="error">Title is Required</div>
+          } @if(title.errors?.['minlength']){
+          <div class="error">Minimum 3 characters are required</div>
 
-  &nbsp; &nbsp;
+          } }
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>Description:</label>
+        </td>
+        <td>
+          <textarea
+            name="description"
+            [(ngModel)]="task.description"
+            #description="ngModel"
+            required
+          ></textarea>
+          @if(description.invalid){ @if(description.errors?.['required'] && (description.dirty ||
+          description.touched)){
+          <div class="error">Description is Required</div>
+          } }
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>Status:</label>
+        </td>
+        <td>
+          <select name="status" [(ngModel)]="task.status" #status="ngModel" required>
+            <option value="">---Select---</option>
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+          </select>
+          @if(status.invalid){ @if(status.errors?.['required'] && (status.dirty || status.touched)){
+          <div class="error">Please select Status</div>
+          } }
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <button type="submit" [disabled]="taskForm.invalid">Submit</button>
 
-  <button type="button">Add New Task</button>
-
-  <br />
-  To test the input box value {{ taskTitle }}
+          {{ submittedTask | json }}
+          {{ task | json }}
+        </td>
+      </tr>
+    </table>
+  </form>
 </div>
 
 <div align="center">
@@ -41,7 +98,7 @@
       <!-- (onTaskCompleteEvent)="onTaskComplete($event)" is called as Output property Binding -->
       <tr
         code-for-beginners-task-item
-        [class.completed]="task.status === status.COMPLETED"
+        [class.completed]="task.status === taskStatus.COMPLETED"
         [task]="task"
         (onTaskCompleteEvent)="onTaskComplete($event)"
         (onDeleteTaskEvent)="deleteTask($event)"
