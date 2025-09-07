@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { Status, Task } from '../interfaces/task';
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../services/task-service';
+import { TaskItem } from './task-item/task-item';
 
 @Component({
   selector: 'code-for-beginners-task-list',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TaskItem],
   templateUrl: './task-list.html',
   styleUrls: ['./task-list.css'],
 })
@@ -27,7 +28,7 @@ export class TaskList {
    * @returns {void}
    */
   deleteTask(id: number): void {
-    this.tasks = this.taskService.deleteTask(id);
+    this.tasks = this.taskService.deleteTask(this.tasks, id);
   }
   /**
    * On Change mark task completed.
@@ -35,10 +36,6 @@ export class TaskList {
    *
    */
   onTaskComplete(task: Task): void {
-    if (task.status === Status.PENDING) {
-      task.status = Status.COMPLETED;
-    } else {
-      task.status = Status.PENDING;
-    }
+    task.status = task.status === Status.PENDING ? Status.COMPLETED : Status.PENDING;
   }
 }

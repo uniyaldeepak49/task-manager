@@ -37,35 +37,15 @@
       <!-- [ngClass]="{ completed: task.status === 'Completed' }" -->
       <!-- [style.background-color]="task.status === 'Completed' ? 'lightgreen' : ''" -->
 
-      <tr [class.completed]="task.status === status.COMPLETED">
-        <td>
-          <input type="checkbox" (change)="onTaskComplete(task)" />
-        </td>
-        <td>
-          {{ task.id }}
-        </td>
-
-        <!-- title Column -->
-
-        <td>
-          {{ task.title }}
-        </td>
-
-        <!-- description Column -->
-
-        <td>
-          {{ task.description }}
-        </td>
-
-        <!-- status Column -->
-
-        <td>
-          {{ task.status }}
-        </td>
-        <td>
-          <button type="button" (click)="deleteTask(task.id)">Delete</button>
-        </td>
-      </tr>
+      <!-- [task]="task" is called as Input property Binding -->
+      <!-- (onTaskCompleteEvent)="onTaskComplete($event)" is called as Output property Binding -->
+      <tr
+        code-for-beginners-task-item
+        [class.completed]="task.status === status.COMPLETED"
+        [task]="task"
+        (onTaskCompleteEvent)="onTaskComplete($event)"
+        (onDeleteTaskEvent)="deleteTask($event)"
+      ></tr>
 
       } } @else {
       <tr align="center">

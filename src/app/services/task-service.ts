@@ -19,8 +19,7 @@ export class TaskService {
    * @param task
    * @returns {Task[]}
    */
-  deleteTask(id: number): Task[] {
-    const tasks: Task[] = this.getTasks();
+  deleteTask(tasks: Task[], id: number): Task[] {
     const refinedTasks: Task[] = tasks.filter((t: Task) => t.id !== id);
     return refinedTasks;
   }
