@@ -1,0 +1,50 @@
+<div align="center">
+  <!--Template Driven form-->
+  <!-- <code-for-beginners-add-new-task-template-driven></code-for-beginners-add-new-task-template-driven> -->
+  <code-for-beginners-add-new-task-reactive-forms></code-for-beginners-add-new-task-reactive-forms>
+</div>
+
+<div align="center">
+  <h3>Task List</h3>
+</div>
+
+<div>
+  <table align="center">
+    <thead>
+      <tr>
+        <th></th>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      @if(tasks.length){ @for(task of tasks; track task){
+
+      <!-- ID Column -->
+      <!--[ngStyle]="{ 'background-color': task.status === 'Completed' ? 'lightgreen' : 'white' }-->
+      <!-- [ngClass]="{ completed: task.status === 'Completed' }" -->
+      <!-- [style.background-color]="task.status === 'Completed' ? 'lightgreen' : ''" -->
+
+      <!-- [task]="task" is called as Input property Binding -->
+      <!-- (onTaskCompleteEvent)="onTaskComplete($event)" is called as Output property Binding -->
+      <tr
+        code-for-beginners-task-item
+        [class.completed]="task.status === taskStatus.COMPLETED"
+        [task]="task"
+        (onTaskCompleteEvent)="onTaskComplete($event)"
+        (onDeleteTaskEvent)="deleteTask($event)"
+      ></tr>
+
+      } } @else {
+      <tr align="center">
+        <td>
+          <div>No Data found</div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

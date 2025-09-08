@@ -1,13 +1,15 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
-import { Status, Task } from '../interfaces/task';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { TaskService } from '../services/task-service';
 import { TaskItem } from './task-item/task-item';
+import { Task, Status } from '../../interfaces/task';
+import { TaskService } from '../../services/task-service';
+import { AddNewTaskReactiveForms } from '../add-new-task-reactive-forms/add-new-task-reactive-forms';
+import { AddNewTaskTemplateDriven } from '../add-new-task-template-driven/add-new-task-template-driven';
 
 @Component({
   selector: 'code-for-beginners-task-list',
-  imports: [CommonModule, FormsModule, TaskItem],
+  imports: [CommonModule, FormsModule, TaskItem, AddNewTaskReactiveForms, AddNewTaskTemplateDriven],
   templateUrl: './task-list.html',
   styleUrls: ['./task-list.css'],
 })
@@ -15,13 +17,7 @@ export class TaskList {
   taskTitle: string = 'Task title 1';
   tasks: Task[] = [];
   taskStatus = Status;
-  task: Task = {
-    id: 0,
-    title: '',
-    description: '',
-    status: Status.PENDING,
-  };
-  submittedTask: Task | null = null;
+
   private taskService = inject(TaskService);
   // private taskService: TaskService
   // @Inject(TaskService) private taskService: TaskService;
@@ -44,20 +40,5 @@ export class TaskList {
    */
   onTaskComplete(task: Task): void {
     task.status = task.status === Status.PENDING ? Status.COMPLETED : Status.PENDING;
-  }
-  /**
-   * On Submit task form.
-   * @param taskForm
-   */
-  onSubmit(taskForm: NgForm): void {
-    if (taskForm.valid) {
-      this.submittedTask = this.task; // made same reference of task property in submittedTask property
-      this.submittedTask = { ...this.task }; // create a shallow copy of task property in submittedTask property
-
-      this.submittedTask.title = 'deepak uniyal';
-
-      console.log('submitted Task', this.submittedTask);
-      console.log('original task', this.task);
-    }
   }
 }
