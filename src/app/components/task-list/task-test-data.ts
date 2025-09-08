@@ -1,4 +1,4 @@
-import { Status, Task } from '../interfaces/task';
+import { Status, Task } from '../../interfaces/task';
 
 export const TASK_LIST: Task[] = [
   {

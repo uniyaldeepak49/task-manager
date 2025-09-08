@@ -1,0 +1,68 @@
+<h3>New Task (Template driven form)</h3>
+
+<form #taskForm="ngForm" (ngSubmit)="onSubmit(taskForm)" novalidate>
+  <table>
+    <tr>
+      <td>
+        <label>Title:</label>
+      </td>
+      <td>
+        <input
+          type="text"
+          [(ngModel)]="task.title"
+          name="title"
+          #title="ngModel"
+          required
+          minlength="3"
+        />
+
+        @if(title.invalid){ @if(title.errors?.['required'] && (title.dirty || title.touched)){
+        <div class="error">Title is Required</div>
+        } @if(title.errors?.['minlength']){
+        <div class="error">Minimum 3 characters are required</div>
+
+        } }
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label>Description:</label>
+      </td>
+      <td>
+        <textarea
+          name="description"
+          [(ngModel)]="task.description"
+          #description="ngModel"
+          required
+        ></textarea>
+        @if(description.invalid){ @if(description.errors?.['required'] && (description.dirty ||
+        description.touched)){
+        <div class="error">Description is Required</div>
+        } }
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label>Status:</label>
+      </td>
+      <td>
+        <select name="status" [(ngModel)]="task.status" #status="ngModel" required>
+          <option value="">---Select---</option>
+          <option value="Pending">Pending</option>
+          <option value="Completed">Completed</option>
+        </select>
+        @if(status.invalid){ @if(status.errors?.['required'] && (status.dirty || status.touched)){
+        <div class="error">Please select Status</div>
+        } }
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <button type="submit" [disabled]="taskForm.invalid">Submit</button>
+        {{ submittedTask | json }}
+        {{ task | json }}
+      </td>
+    </tr>
+  </table>
+</form>
