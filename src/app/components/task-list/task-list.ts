@@ -5,11 +5,10 @@ import { TaskItem } from './task-item/task-item';
 import { Task, Status } from '../../interfaces/task';
 import { TaskService } from '../../services/task-service';
 import { AddNewTaskReactiveForms } from '../add-new-task-reactive-forms/add-new-task-reactive-forms';
-import { AddNewTaskTemplateDriven } from '../add-new-task-template-driven/add-new-task-template-driven';
 
 @Component({
   selector: 'code-for-beginners-task-list',
-  imports: [CommonModule, FormsModule, TaskItem, AddNewTaskReactiveForms, AddNewTaskTemplateDriven],
+  imports: [CommonModule, FormsModule, TaskItem, AddNewTaskReactiveForms],
   templateUrl: './task-list.html',
   styleUrls: ['./task-list.css'],
 })
