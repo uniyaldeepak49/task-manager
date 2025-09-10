@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input, OnInit, output } from '@angular/core';
 import {
   ReactiveFormsModule,
   UntypedFormControl,
@@ -7,6 +7,8 @@ import {
 } from '@angular/forms';
 import { Task, Status } from '../../interfaces/task';
 import { CommonModule } from '@angular/common';
+import { TaskService } from '../../services/task-service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'code-for-beginners-add-new-task-reactive-forms',
@@ -14,8 +16,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './add-new-task-reactive-forms.html',
   styleUrl: './add-new-task-reactive-forms.css',
 })
-export class AddNewTaskReactiveForms {
-  submittedTask: Task | null = null;
+export class AddNewTaskReactiveForms implements OnInit {
+  readonly id = input<number>();
+  readonly tasks = input<Task[]>();
+
   task: Task = {
     id: 0,
     title: '',
@@ -28,6 +32,21 @@ export class AddNewTaskReactiveForms {
     status: new UntypedFormControl('', Validators.required),
   });
 
+  addNewTaskEvent = output<Task>();
+
+  ngOnInit(): void {
+    debugger;
+    if (this.id()) {
+      // Editable is required
+      const task: Task | undefined = this.tasks()?.find((task: Task) => task.id === this.id());
+      this.taskFormGroup.patchValue({
+        title: task?.title,
+        description: task?.description,
+        status: task?.status,
+      });
+    }
+  }
+
   get form() {
     return this.taskFormGroup.controls;
   }
@@ -37,13 +56,11 @@ export class AddNewTaskReactiveForms {
    */
   onSubmit(): void {
     if (this.taskFormGroup.valid) {
-      this.submittedTask = this.task; // made same reference of task property in submittedTask property
-      this.submittedTask = { ...this.task }; // create a shallow copy of task property in submittedTask property
-
-      this.submittedTask.title = 'deepak uniyal';
-
-      console.log('submitted Task', this.submittedTask);
-      console.log('original task', this.task);
+      if (!this.id()) {
+        this.addNewTaskEvent.emit(this.taskFormGroup.value);
+      } else {
+        // Fire the edit task event
+      }
     }
   }
 }

@@ -12,6 +12,8 @@ export class TaskItem {
   readonly task = input.required<Task>();
   onTaskCompleteEvent = output<Task>();
   onDeleteTaskEvent = output<number>();
+  onEditTaskEvent = output<number>();
+
   // @Output() onTaskCompleteEvent = new EventEmitter<Task>(); // Output property
   // @Output() onDeleteTaskEvent = new EventEmitter<number>(); // Output property
 
@@ -28,5 +30,12 @@ export class TaskItem {
    */
   onDeleteTask(id: number): void {
     this.onDeleteTaskEvent.emit(id);
+  }
+  /**
+   * On task edit event emitted.
+   * @param id
+   */
+  onEditTask(id: number): void {
+    this.onEditTaskEvent.emit(id);
   }
 }

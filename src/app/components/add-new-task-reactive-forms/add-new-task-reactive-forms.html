@@ -1,4 +1,8 @@
+@if(id()){
+<h3>Edit Task (Reactive form)</h3>
+} @else {
 <h3>New Task (Reactive form)</h3>
+}
 
 <form [formGroup]="taskFormGroup" (ngSubmit)="onSubmit()">
   <table>
@@ -48,9 +52,9 @@
     <tr>
       <td></td>
       <td>
-        <button type="submit" [disabled]="taskFormGroup.invalid">Submit</button>
-        {{ submittedTask | json }}
-        {{ task | json }}
+        @if(id()){
+        <button type="submit" [disabled]="taskFormGroup.invalid">Edit Task</button>
+        } @else { <button type="submit" [disabled]="taskFormGroup.invalid">Add New Task</button>}
       </td>
     </tr>
   </table>

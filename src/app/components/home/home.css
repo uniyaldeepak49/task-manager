@@ -1,0 +1,12 @@
+div.home {
+  align-items: center;
+  text-align: center;
+}
+
+ul {
+  text-align: left;
+}
+
+div.home p {
+  font-size: 1.2rem;
+}

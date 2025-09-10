@@ -1,7 +1,18 @@
 <div align="center">
   <!--Template Driven form-->
   <!-- <code-for-beginners-add-new-task-template-driven></code-for-beginners-add-new-task-template-driven> -->
-  <code-for-beginners-add-new-task-reactive-forms></code-for-beginners-add-new-task-reactive-forms>
+
+  @if(id > 0){
+  <code-for-beginners-add-new-task-reactive-forms
+    (addNewTaskEvent)="onAddNewTask($event)"
+    [tasks]="tasks"
+    [id]="id"
+  ></code-for-beginners-add-new-task-reactive-forms>
+  } @else {
+  <code-for-beginners-add-new-task-reactive-forms
+    (addNewTaskEvent)="onAddNewTask($event)"
+  ></code-for-beginners-add-new-task-reactive-forms>
+  }
 </div>
 
 <div align="center">
@@ -35,7 +46,8 @@
         [class.completed]="task.status === taskStatus.COMPLETED"
         [task]="task"
         (onTaskCompleteEvent)="onTaskComplete($event)"
-        (onDeleteTaskEvent)="deleteTask($event)"
+        (onDeleteTaskEvent)="onDeleteTask($event)"
+        (onEditTaskEvent)="onEditTask($event)"
       ></tr>
 
       } } @else {
