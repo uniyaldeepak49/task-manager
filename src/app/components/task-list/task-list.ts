@@ -16,6 +16,7 @@ export class TaskList {
   taskTitle: string = 'Task title 1';
   tasks: Task[] = [];
   taskStatus = Status;
+  id: number = 0;
 
   private taskService = inject(TaskService);
   // private taskService: TaskService
@@ -29,7 +30,7 @@ export class TaskList {
    * @param id
    * @returns {void}
    */
-  deleteTask(id: number): void {
+  onDeleteTask(id: number): void {
     this.tasks = this.taskService.deleteTask(this.tasks, id);
   }
   /**
@@ -39,5 +40,33 @@ export class TaskList {
    */
   onTaskComplete(task: Task): void {
     task.status = task.status === Status.PENDING ? Status.COMPLETED : Status.PENDING;
+  }
+  /**
+   * On Add new task
+   * @param newTask
+   */
+  onAddNewTask(newTask: Task): void {
+    const id: number = this.getIncrementedId();
+    newTask.id = id;
+    this.tasks.push(newTask);
+  }
+
+  /**
+   * Returns max ID
+   * @returns {number}
+   */
+  getIncrementedId(): number {
+    return this.tasks.length ? Math.max(...this.tasks.map((task) => task.id)) + 1 : 1;
+    // let id: number = 0;
+    // if (this.tasks.length) {
+    //   id = Math.max(...this.tasks.map((task) => task.id)) + 1; // [1,2,3,4,5] ==> 1,2,3,4,5
+    // } else {
+    //   id = 1;
+    // }
+
+    // return id;
+  }
+  onEditTask(id: number): void {
+    this.id = id;
   }
 }

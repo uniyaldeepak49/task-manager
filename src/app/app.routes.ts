@@ -23,6 +23,10 @@ export const routes: Routes = [
     component: TaskList,
   },
   {
+    path: 'task-list/:id',
+    component: TaskList,
+  },
+  {
     path: '**',
     component: NotFound,
   },
