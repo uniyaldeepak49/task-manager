@@ -7,8 +7,6 @@ import {
 } from '@angular/forms';
 import { Task, Status } from '../../interfaces/task';
 import { CommonModule } from '@angular/common';
-import { TaskService } from '../../services/task-service';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'code-for-beginners-add-new-task-reactive-forms',
