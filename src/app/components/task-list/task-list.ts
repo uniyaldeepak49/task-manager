@@ -5,6 +5,7 @@ import { TaskItem } from './task-item/task-item';
 import { Task, Status } from '../../interfaces/task';
 import { TaskService } from '../../services/task-service';
 import { AddNewTaskReactiveForms } from '../add-new-task-reactive-forms/add-new-task-reactive-forms';
+import { CommonService } from '../../services/common-service';
 
 @Component({
   selector: 'code-for-beginners-task-list',
@@ -19,6 +20,7 @@ export class TaskList {
   id: number = 0;
 
   private taskService = inject(TaskService);
+  private commonService = inject(CommonService);
   // private taskService: TaskService
   // @Inject(TaskService) private taskService: TaskService;
 
@@ -32,6 +34,7 @@ export class TaskList {
    */
   onDeleteTask(id: number): void {
     this.tasks = this.taskService.deleteTask(this.tasks, id);
+    this.commonService.saveDataInLocalStorage('tasks', this.tasks);
   }
   /**
    * On Change mark task completed.
@@ -49,6 +52,7 @@ export class TaskList {
     const id: number = this.getIncrementedId();
     newTask.id = id;
     this.tasks.push(newTask);
+    this.commonService.saveDataInLocalStorage('tasks', this.tasks);
   }
 
   /**
@@ -68,5 +72,18 @@ export class TaskList {
   }
   onEditTask(id: number): void {
     this.id = id;
+  }
+  onUpdateTask(task: Task): void {
+    let toUpdateTask: Task | undefined = this.tasks.find((t: Task) => t.id === task.id);
+    toUpdateTask = task as Task;
+    this.tasks = this.tasks.map((t) => {
+      if (t.id === task.id) {
+        t = task;
+      }
+      return t;
+    });
+    this.commonService.saveDataInLocalStorage('tasks', this.tasks);
+
+    this.id = 0;
   }
 }
