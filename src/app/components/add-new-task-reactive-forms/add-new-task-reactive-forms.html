@@ -9,6 +9,7 @@
     <tr>
       <td>
         <label>Title:</label>
+        <input type="hidden" formControlName="id" />
       </td>
       <td>
         <input type="text" formControlName="title" minlength="3" />
@@ -53,7 +54,7 @@
       <td></td>
       <td>
         @if(id()){
-        <button type="submit" [disabled]="taskFormGroup.invalid">Edit Task</button>
+        <button type="submit" [disabled]="taskFormGroup.invalid">Update Task</button>
         } @else { <button type="submit" [disabled]="taskFormGroup.invalid">Add New Task</button>}
       </td>
     </tr>

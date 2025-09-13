@@ -69,4 +69,16 @@ export class TaskList {
   onEditTask(id: number): void {
     this.id = id;
   }
+  onUpdateTask(task: Task): void {
+    let toUpdateTask: Task | undefined = this.tasks.find((t: Task) => t.id === task.id);
+    toUpdateTask = task as Task;
+    this.tasks = this.tasks.map((t) => {
+      if (t.id === task.id) {
+        t = task;
+      }
+      return t;
+    });
+
+    this.id = 0;
+  }
 }
