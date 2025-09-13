@@ -1,17 +1,21 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Task } from '../interfaces/task';
 import { TASK_LIST } from '../components/task-list/task-test-data';
+import { CommonService } from './common-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskService {
+  private commonService = inject(CommonService);
+
   /**
    * Returns task list
    * @returns {Task[]}
    */
   getTasks(): Task[] {
-    const tasks: Task[] = TASK_LIST;
+    const tasksFromLocalStorage = this.commonService.getDataFromLocalStorage('tasks');
+    const tasks: Task[] = tasksFromLocalStorage.length ? tasksFromLocalStorage : TASK_LIST;
     return tasks;
   }
   /**
@@ -23,6 +27,4 @@ export class TaskService {
     const refinedTasks: Task[] = tasks.filter((t: Task) => t.id !== id);
     return refinedTasks;
   }
-  addTask(): void {}
-  editTask(): void {}
 }
