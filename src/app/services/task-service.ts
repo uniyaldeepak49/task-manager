@@ -14,8 +14,10 @@ export class TaskService {
    * @returns {Task[]}
    */
   getTasks(): Task[] {
-    const tasksFromLocalStorage = this.commonService.getDataFromLocalStorage('tasks');
-    const tasks: Task[] = tasksFromLocalStorage.length ? tasksFromLocalStorage : TASK_LIST;
+    const tasksFromLocalStorage = this.commonService.getDataFromLocalStorage<Task[]>('tasks');
+    const tasks: Task[] =
+      tasksFromLocalStorage && tasksFromLocalStorage.length > 0 ? tasksFromLocalStorage : TASK_LIST;
+
     return tasks;
   }
   /**
