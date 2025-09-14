@@ -3,31 +3,37 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class CommonService<T> {
+export class CommonService {
   /**
-   * Save data in local storage
-   * @param data
+   * Save data in local storage (only if changed)
    */
-  saveDataInLocalStorage(key: string, data: T) {
-    const localStorageData: T = localStorage.getItem(key) as T;
-    if (!localStorageData || JSON.stringify(data) !== localStorageData) {
-      // data exists and is same as data is coming from...
+  saveDataInLocalStorage<T>(key: string, data: T): void {
+    const existing = this.getDataFromLocalStorage<T>(key);
+
+    if (!existing || JSON.stringify(existing) !== JSON.stringify(data)) {
       localStorage.setItem(key, JSON.stringify(data));
     }
   }
+
   /**
-   * Returns data from local storage
-   * @returns
+   * Get parsed data from local storage
    */
-  getDataFromLocalStorage(key: string): T {
-    let localStorageData: T = localStorage.getItem(key) as T;
+  getDataFromLocalStorage<T>(key: string): T | null {
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : null;
+  }
 
-    if (localStorageData) {
-      localStorageData = JSON.parse(localStorageData as string);
-    } else {
-      localStorageData = false as T;
-    }
+  /**
+   * Remove an item from local storage
+   */
+  removeDataFromLocalStorage(key: string): void {
+    localStorage.removeItem(key);
+  }
 
-    return localStorageData;
+  /**
+   * Clear all local storage
+   */
+  clearLocalStorage(): void {
+    localStorage.clear();
   }
 }
