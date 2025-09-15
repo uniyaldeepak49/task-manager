@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TaskItem } from './task-item/task-item';
@@ -6,6 +6,7 @@ import { Task, Status } from '../../interfaces/task';
 import { TaskService } from '../../services/task-service';
 import { AddNewTaskReactiveForms } from '../add-new-task-reactive-forms/add-new-task-reactive-forms';
 import { CommonService } from '../../services/common-service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'code-for-beginners-task-list',
@@ -13,20 +14,37 @@ import { CommonService } from '../../services/common-service';
   templateUrl: './task-list.html',
   styleUrls: ['./task-list.css'],
 })
-export class TaskList {
+export class TaskList implements OnInit {
   taskTitle: string = 'Task title 1';
   tasks: Task[] = [];
   taskStatus = Status;
   id: number = 0;
+  isTasksLoaded = false;
 
   private taskService = inject(TaskService);
   private commonService = inject(CommonService);
   // private taskService: TaskService
   // @Inject(TaskService) private taskService: TaskService;
 
-  constructor() {
-    this.tasks = this.taskService.getTasks();
+  ngOnInit(): void {
+    this.getTasks();
   }
+  /**
+   * Returns tasks list from service.
+   */
+  getTasks(): void {
+    this.taskService.getTasks().subscribe({
+      next: (tasks: Task[]) => {
+        this.isTasksLoaded = true;
+        this.tasks = tasks;
+        this.commonService.saveDataInLocalStorage('tasks', this.tasks);
+      },
+      error: (error: HttpErrorResponse) => {
+        throw new Error('Error from tasks API', error.error);
+      },
+    });
+  }
+
   /**
    * Deletes the task from task list by ID.
    * @param id

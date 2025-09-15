@@ -50,13 +50,19 @@
         (onEditTaskEvent)="onEditTask($event)"
       ></tr>
 
-      } } @else {
+      } } @else { @if(!isTasksLoaded){
+      <tr align="center">
+        <td>
+          <div>Data is loading</div>
+        </td>
+      </tr>
+      } @else {
       <tr align="center">
         <td>
           <div>No Data found</div>
         </td>
       </tr>
-      }
+      } }
     </tbody>
   </table>
 </div>
