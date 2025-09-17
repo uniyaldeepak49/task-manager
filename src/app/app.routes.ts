@@ -3,6 +3,7 @@ import { Home } from './components/home/home';
 import { NotFound } from './components/not-found/not-found';
 import { About } from './components/about/about';
 import { TaskList } from './components/task-list/task-list';
+import { Learning } from './components/learning/learning';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,10 @@ export const routes: Routes = [
   {
     path: 'task-list/:id',
     component: TaskList,
+  },
+  {
+    path: 'learning',
+    component: Learning
   },
   {
     path: '**',
