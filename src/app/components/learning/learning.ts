@@ -17,6 +17,7 @@ export class Learning {
 
     // Synchronous example 1 with blocking code
     console.log("Setup for Pooja start");
+    debugger;
 
     // this.getPoojaEquipmentsExample1();
     // this.getPoojaEquipmentsExample2();
@@ -32,6 +33,7 @@ export class Learning {
 
     const response = this.getPoojaEquipmentsExample2().subscribe({
       next: (response) =>{
+        debugger;
         console.log("response", response)
       },
       error: (error) =>{
@@ -40,6 +42,7 @@ export class Learning {
     })
     
 
+    debugger;
     console.log("Setup is done for Pooja, person is went for equipments purchasing");
 
   }
@@ -84,7 +87,19 @@ export class Learning {
 
     
 
-    return this.off("Item a is purchased");
+     return new Observable((observer)=> {
+      // observer.next("Item A is purchased");
+      // observer.next("Item B is purchased");
+      // observer.next("Item C is purchased");
+
+      fetch("https://example.com/getPurchasedItems").then((response) => response.json()).then((response)=>{
+      observer.next("Vegetables is purchased")
+    }).catch((error) => {
+      console.log("There is some error to get vegetables", error);
+    })
+
+      // return of("Purchased")
+    })
 
 
 
@@ -94,7 +109,8 @@ export class Learning {
   off(item: string): Observable<string>{
 
     return new Observable((observer)=> {
-      observer.next(item)
+      observer.next("Item A is purchased");
+      observer.next("Item B is purchased")
 
       // return of("Purchased")
     })

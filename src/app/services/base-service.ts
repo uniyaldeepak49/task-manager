@@ -15,9 +15,13 @@ export class BaseService<T> {
    * @param data
    * @param serviceName
    */
-  post<T>(data: T, serviceName: string): void {
+  post<T>(data: T, serviceName: string): Observable<T> {
     const url = `${BaseService.API_BASE_URL}/${serviceName}`;
-    this.http.post<T>(url, { data });
+   return this.http.get(url).pipe(
+      map((response) => 
+      response as T
+      )
+    );
   }
   /**
    * Gets data from Backend service.
@@ -27,9 +31,9 @@ export class BaseService<T> {
   get(serviceName: string): Observable<T> {
     const url = `${BaseService.API_BASE_URL}/${serviceName}`;
     return this.http.get(url).pipe(
-      map((response) => {
-        return response as T;
-      })
+      map((response) => 
+      response as T
+      )
     );
   }
   /**
@@ -37,9 +41,13 @@ export class BaseService<T> {
    * @param data
    * @param serviceName
    */
-  put<T>(data: T, serviceName: string): void {
+  put<T>(data: T, serviceName: string): Observable<T> {
     const url = `${BaseService.API_BASE_URL}/${serviceName}`;
-    this.http.put<T>(url, { data });
+    return this.http.get(url).pipe(
+      map((response) => 
+      response as T
+      )
+    );
   }
   /**
    * Deletes the data from service.
