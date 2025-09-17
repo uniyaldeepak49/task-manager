@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TaskItem } from './task-item/task-item';
@@ -7,6 +7,7 @@ import { TaskService } from '../../services/task-service';
 import { AddNewTaskReactiveForms } from '../add-new-task-reactive-forms/add-new-task-reactive-forms';
 import { CommonService } from '../../services/common-service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'code-for-beginners-task-list',
@@ -14,7 +15,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './task-list.html',
   styleUrls: ['./task-list.css'],
 })
-export class TaskList implements OnInit {
+export class TaskList implements OnInit, OnDestroy {
   taskTitle: string = 'Task title 1';
   tasks: Task[] = [];
   taskStatus = Status;
@@ -23,6 +24,7 @@ export class TaskList implements OnInit {
 
   private taskService = inject(TaskService);
   private commonService = inject(CommonService);
+  subscription: Subscription = Subscription.EMPTY;
   // private taskService: TaskService
   // @Inject(TaskService) private taskService: TaskService;
 
@@ -33,7 +35,7 @@ export class TaskList implements OnInit {
    * Returns tasks list from service.
    */
   getTasks(): void {
-    this.taskService.getTasks().subscribe({
+    this.subscription = this.taskService.getTasks().subscribe({
       next: (tasks: Task[]) => {
         this.isTasksLoaded = true;
         this.tasks = tasks;
@@ -103,5 +105,11 @@ export class TaskList implements OnInit {
     this.commonService.saveDataInLocalStorage('tasks', this.tasks);
 
     this.id = 0;
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }
