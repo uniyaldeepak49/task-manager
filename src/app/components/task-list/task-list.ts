@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, SlicePipe } from '@angular/common';
 import { TaskItem } from './task-item/task-item';
 import { Task, Status } from '../../interfaces/task';
 import { TaskService } from '../../services/task-service';
@@ -8,10 +8,11 @@ import { AddNewTaskReactiveForms } from '../add-new-task-reactive-forms/add-new-
 import { CommonService } from '../../services/common-service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+import { FilterTaskPipe } from '../../pipes/filter-task-pipe';
 
 @Component({
   selector: 'code-for-beginners-task-list',
-  imports: [CommonModule, FormsModule, TaskItem, AddNewTaskReactiveForms],
+  imports: [CommonModule, FormsModule, TaskItem, AddNewTaskReactiveForms, FilterTaskPipe],
   templateUrl: './task-list.html',
   styleUrls: ['./task-list.css'],
 })
@@ -21,6 +22,7 @@ export class TaskList implements OnInit, OnDestroy {
   taskStatus = Status;
   id: number = 0;
   isTasksLoaded = false;
+  searchTerm = '';
 
   private taskService = inject(TaskService);
   private commonService = inject(CommonService);
@@ -71,7 +73,7 @@ export class TaskList implements OnInit, OnDestroy {
   onAddNewTask(newTask: Task): void {
     const id: number = this.getIncrementedId();
     newTask.id = id;
-    this.tasks.push(newTask);
+    this.tasks = [...this.tasks, newTask];
     this.commonService.saveDataInLocalStorage('tasks', this.tasks);
   }
 

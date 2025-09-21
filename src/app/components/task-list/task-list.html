@@ -17,6 +17,8 @@
 
 <div align="center">
   <h3>Task List</h3>
+
+  <input type="text" [(ngModel)]="searchTerm" placeholder="Search" />
 </div>
 
 <div>
@@ -32,7 +34,7 @@
       </tr>
     </thead>
     <tbody>
-      @if(tasks.length){ @for(task of tasks; track task){
+      @if(tasks.length){ @for(task of tasks | filterTask: searchTerm:'description'; track task.id){
 
       <!-- ID Column -->
       <!--[ngStyle]="{ 'background-color': task.status === 'Completed' ? 'lightgreen' : 'white' }-->

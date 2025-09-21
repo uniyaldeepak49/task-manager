@@ -1,9 +1,10 @@
-import { Component, EventEmitter, input, Input, OnInit, output, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Task } from '../../../interfaces/task';
+import { CapitalizePipe } from '../../../pipes/capitalize-pipe';
 
 @Component({
   selector: 'tr[code-for-beginners-task-item]',
-  imports: [],
+  imports: [CapitalizePipe],
   templateUrl: './task-item.html',
   styleUrl: './task-item.css',
 })

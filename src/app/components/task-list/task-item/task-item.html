@@ -8,19 +8,19 @@
 <!-- title Column -->
 
 <td>
-  {{ task().title }}
+  {{ task().title | capitalize }}
 </td>
 
 <!-- description Column -->
 
 <td>
-  {{ task().description }}
+  {{ task().description | capitalize }}
 </td>
 
 <!-- status Column -->
 
 <td>
-  {{ task().status }}
+  {{ task().status | capitalize }}
 </td>
 <td>
   <button type="button" (click)="onEditTask(task().id)">Edit</button> |
