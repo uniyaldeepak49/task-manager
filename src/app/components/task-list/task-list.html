@@ -1,28 +1,39 @@
-<div align="center">
+<div class="row mt-5">
   <!--Template Driven form-->
   <!-- <code-for-beginners-add-new-task-template-driven></code-for-beginners-add-new-task-template-driven> -->
 
-  @if(id > 0){
-  <code-for-beginners-add-new-task-reactive-forms
-    (updateTaskEvent)="onUpdateTask($event)"
-    [tasks]="tasks"
-    [id]="id"
-  ></code-for-beginners-add-new-task-reactive-forms>
-  } @else {
-  <code-for-beginners-add-new-task-reactive-forms
-    (addNewTaskEvent)="onAddNewTask($event)"
-  ></code-for-beginners-add-new-task-reactive-forms>
-  }
+  <div class="col-md-6 offset-3">
+    @if(id > 0){
+    <code-for-beginners-add-new-task-reactive-forms
+      (updateTaskEvent)="onUpdateTask($event)"
+      [tasks]="tasks"
+      [id]="id"
+    ></code-for-beginners-add-new-task-reactive-forms>
+    } @else {
+    <code-for-beginners-add-new-task-reactive-forms
+      (addNewTaskEvent)="onAddNewTask($event)"
+    ></code-for-beginners-add-new-task-reactive-forms>
+    }
+  </div>
 </div>
 
-<div align="center">
-  <h3>Task List</h3>
-
-  <input type="text" [(ngModel)]="searchTerm" placeholder="Search" />
+<div class="row">
+  <div class="col-md-6 offset-3">
+    <div class="card mt-3 mb-3">
+      <div class="card-body">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Search task"
+          class="form-control"
+        />
+      </div>
+    </div>
+  </div>
 </div>
 
 <div>
-  <table align="center">
+  <table class="table table-bordered table-striped table-hover">
     <thead>
       <tr>
         <th></th>
@@ -54,13 +65,13 @@
 
       } } @else { @if(!isTasksLoaded){
       <tr align="center">
-        <td>
+        <td colspan="6">
           <div>Data is loading</div>
         </td>
       </tr>
       } @else {
       <tr align="center">
-        <td>
+        <td colspan="6">
           <div>No Data found</div>
         </td>
       </tr>

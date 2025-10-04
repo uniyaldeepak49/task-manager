@@ -6,6 +6,7 @@ import { TaskList } from './components/task-list/task-list';
 import { Learning } from './components/learning/learning';
 import { SignIn } from './components/sign-in/sign-in';
 import { SignUp } from './components/sign-up/sign-up';
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,7 @@ export const routes: Routes = [
   {
     path: 'task-list',
     component: TaskList,
+    canActivate: [authGuard],
   },
   {
     path: 'task-list/:id',

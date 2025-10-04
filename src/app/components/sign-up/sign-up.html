@@ -10,19 +10,34 @@
           <div class="col-md-10 offset-1">
             <div class="card-title fw-bold">Sign Up (All the fields are necessary.)</div>
 
-            <form>
+            <form [formGroup]="userRegisterForm">
               <div class="form-floating mb-3">
-                <input type="text" placeholder="Enter an Name" class="form-control" />
+                <input
+                  type="text"
+                  placeholder="Enter an Name"
+                  class="form-control"
+                  formControlName="name"
+                />
                 <label>Name:</label>
               </div>
 
               <div class="form-floating mb-3">
-                <input type="text" placeholder="Enter an Email" class="form-control" />
+                <input
+                  type="text"
+                  placeholder="Enter an Email"
+                  class="form-control"
+                  formControlName="email"
+                />
                 <label>Email:</label>
               </div>
 
               <div class="form-floating mb-3">
-                <input type="text" placeholder="Enter Contact No." class="form-control" />
+                <input
+                  type="text"
+                  placeholder="Enter Contact No."
+                  class="form-control"
+                  formControlName="contact_no"
+                />
                 <label>Contact No:</label>
               </div>
 

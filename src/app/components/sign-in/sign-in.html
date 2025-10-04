@@ -1,57 +1,53 @@
 <div class="row mt-5">
-  <div class="col-md-12">
+  <div class="col-md-8 offset-2">
     <div class="card">
-      <div class="card-header text-center">Please enter your email and password to Sign In.</div>
+      <div class="card-header">
+        <div class="fw-bold">Please enter your email and password to Sign In.</div>
+      </div>
 
       <div class="card-body">
-        <div class="row">
-          <div class="col-md-10 offset-1">
-            <div class="card-title fw-bold">Sign In (All the fields are necessary.)</div>
-
-            <form [formGroup]="loginForm">
-              <div class="form-floating mb-3">
-                <input
-                  type="text"
-                  placeholder="Enter an Email"
-                  class="form-control"
-                  formControlName="email"
-                />
-                <label>Email:</label>
-                @if(lForm['email'].invalid && (lForm['email'].dirty || lForm['email'].touched)){
-                @if(lForm['email'].errors?.['required']){
-                <div class="error">Email is required</div>
-                } @if(lForm['email'].errors?.['email']){
-                <div class="error">Please enter valid Email</div>
-                } }
-              </div>
-
-              <div class="form-floating mb-3">
-                <input
-                  type="password"
-                  placeholder="Enter the Password"
-                  class="form-control"
-                  formControlName="password"
-                />
-                <label>Password:</label>
-                @if(lForm['password'].invalid && (lForm['password'].dirty ||
-                lForm['password'].touched)){ @if(lForm['password'].errors?.['required']){
-                <div class="error">Password is required</div>
-                } }
-              </div>
-
-              <div class="pt-3">
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  [disabled]="loginForm.pristine || loginForm.invalid"
-                >
-                  Sign In
-                </button>
-              </div>
-              <div class="pt-1">Not Registered!, Click <a routerLink="/sign-up">here</a></div>
-            </form>
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              placeholder="Enter an Email"
+              class="form-control"
+              formControlName="email"
+            />
+            <label>Email:</label>
+            @if(lForm['email'].invalid && (lForm['email'].dirty || lForm['email'].touched)){
+            @if(lForm['email'].errors?.['required']){
+            <div class="error">Email is required</div>
+            } @if(lForm['email'].errors?.['email']){
+            <div class="error">Please enter valid Email</div>
+            } }
           </div>
-        </div>
+
+          <div class="form-floating mb-3">
+            <input
+              type="password"
+              placeholder="Enter the Password"
+              class="form-control"
+              formControlName="password"
+            />
+            <label>Password:</label>
+            @if(lForm['password'].invalid && (lForm['password'].dirty ||
+            lForm['password'].touched)){ @if(lForm['password'].errors?.['required']){
+            <div class="error">Password is required</div>
+            } }
+          </div>
+
+          <div class="pt-3">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="loginForm.pristine || loginForm.invalid"
+            >
+              Sign In
+            </button>
+          </div>
+          <div class="pt-1">Not Registered!, Click <a routerLink="/sign-up">here</a></div>
+        </form>
       </div>
     </div>
   </div>
