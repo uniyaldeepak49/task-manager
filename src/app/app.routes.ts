@@ -4,12 +4,23 @@ import { NotFound } from './components/not-found/not-found';
 import { About } from './components/about/about';
 import { TaskList } from './components/task-list/task-list';
 import { Learning } from './components/learning/learning';
+import { SignIn } from './components/sign-in/sign-in';
+import { SignUp } from './components/sign-up/sign-up';
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'sign-in',
     pathMatch: 'full',
+  },
+  {
+    path: 'sign-in',
+    component: SignIn,
+  },
+  {
+    path: 'sign-up',
+    component: SignUp,
   },
   {
     path: 'home',
@@ -22,6 +33,7 @@ export const routes: Routes = [
   {
     path: 'task-list',
     component: TaskList,
+    canActivate: [authGuard],
   },
   {
     path: 'task-list/:id',
@@ -29,7 +41,7 @@ export const routes: Routes = [
   },
   {
     path: 'learning',
-    component: Learning
+    component: Learning,
   },
   {
     path: '**',
