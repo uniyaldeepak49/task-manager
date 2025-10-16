@@ -1,7 +1,9 @@
-<!-- @if(isLoggedIn$ | async){ -->
-<code-for-beginners-header></code-for-beginners-header>
-<!-- } -->
+<div class="d-flex flex-column min-vh-100">
+  <code-for-beginners-header />
 
-<div class="container">
-  <router-outlet />
+  <div class="container flex-grow-1 pt-5">
+    <router-outlet />
+  </div>
+
+  <app-footer />
 </div>

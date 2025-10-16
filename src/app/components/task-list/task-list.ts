@@ -24,11 +24,15 @@ export class TaskList implements OnInit, OnDestroy {
   isTasksLoaded = false;
   searchTerm = '';
 
+  // Pagination properties
+  currentPage = 1;
+  itemsPerPage = 2;
+  totalPages = 0;
+  Math = Math;
+
   private taskService = inject(TaskService);
   private commonService = inject(CommonService);
   subscription: Subscription = Subscription.EMPTY;
-  // private taskService: TaskService
-  // @Inject(TaskService) private taskService: TaskService;
 
   ngOnInit(): void {
     this.getTasks();
@@ -83,14 +87,6 @@ export class TaskList implements OnInit, OnDestroy {
    */
   getIncrementedId(): number {
     return this.tasks.length ? Math.max(...this.tasks.map((task) => task.id)) + 1 : 1;
-    // let id: number = 0;
-    // if (this.tasks.length) {
-    //   id = Math.max(...this.tasks.map((task) => task.id)) + 1; // [1,2,3,4,5] ==> 1,2,3,4,5
-    // } else {
-    //   id = 1;
-    // }
-
-    // return id;
   }
   onEditTask(id: number): void {
     this.id = id;
@@ -107,6 +103,26 @@ export class TaskList implements OnInit, OnDestroy {
     this.commonService.saveDataInLocalStorage('tasks', this.tasks);
 
     this.id = 0;
+  }
+
+  // Pagination methods
+  get paginatedTasks(): Task[] {
+    const filteredTasks = this.tasks.filter((task) =>
+      task.description.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+    this.totalPages = Math.ceil(filteredTasks.length / this.itemsPerPage);
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return filteredTasks.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
+
+  get pageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
   ngOnDestroy(): void {

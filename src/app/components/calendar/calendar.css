@@ -1,0 +1,19 @@
+.calendar-day {
+  padding: 10px;
+  border: 1px solid #e9ecef;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.calendar-day:hover {
+  background-color: #f8f9fa;
+}
+
+.calendar-day.has-event {
+  background-color: #e3f2fd;
+  font-weight: bold;
+}
+
+.calendar-grid .row {
+  margin: 0;
+}

@@ -1,6 +1,10 @@
-<div class="card">
-  <div class="card-header">
-    @if(id()){ Edit Task (Reactive form) } @else { New Task (Reactive form) }
+<div class="border-0 shadow-sm">
+  <div class="card-header bg-white border-0 py-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0">
+        @if(id()){ Edit Task (Reactive form) } @else { New Task (Reactive form) }
+      </h5>
+    </div>
   </div>
   <div class="card-body">
     <form [formGroup]="taskFormGroup" (ngSubmit)="onSubmit()">
@@ -11,18 +15,9 @@
         <label>Title:</label>
         @if(form['title'].invalid){ @if(form['title'].errors?.['required'] && (form['title'].dirty
         || form['title'].touched)){
-        <div class="error">Title is required</div>
+        <div class="text-danger">Title is required</div>
         } @if(form['title'].errors?.['minlength']){
-        <div class="error">Minimum 3 characters are required</div>
-        } }
-      </div>
-
-      <div class="form-floating mb-3">
-        <input type="text" formControlName="title" minlength="3" class="form-control" />
-        <label>Title:</label>
-        @if(form['description'].invalid){ @if(form['description'].errors?.['required'] &&
-        (form['description'].dirty || form['description'].touched)){
-        <div class="error">Description is required</div>
+        <div class="text-danger">Minimum 3 characters are required</div>
         } }
       </div>
 
@@ -31,7 +26,7 @@
         <label>Description:</label>
         @if(form['description'].invalid){ @if(form['description'].errors?.['required'] &&
         (form['description'].dirty || form['description'].touched)){
-        <div class="error">Description is required</div>
+        <div class="text-danger">Description is required</div>
         } }
       </div>
 
@@ -44,7 +39,7 @@
         <label>Status:</label>
         @if(form['status'].invalid){ @if(form['status'].errors?.['required'] &&
         (form['status'].dirty || form['status'].touched)){
-        <div class="error">Please select status</div>
+        <div class="text-danger">Please select status</div>
         } }
       </div>
 

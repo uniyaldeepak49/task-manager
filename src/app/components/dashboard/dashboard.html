@@ -1,0 +1,218 @@
+<div class="container py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="fw-bold">Dashboard</h2>
+      <p class="text-muted">Overview of your productivity and tasks</p>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <i class="bi bi-list-task text-primary fs-1 mb-2"></i>
+          <h3 class="fw-bold">{{stats.totalTasks}}</h3>
+          <p class="text-muted mb-0">Total Tasks</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <i class="bi bi-check-circle text-success fs-1 mb-2"></i>
+          <h3 class="fw-bold">{{stats.completedTasks}}</h3>
+          <p class="text-muted mb-0">Completed</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <i class="bi bi-clock text-warning fs-1 mb-2"></i>
+          <h3 class="fw-bold">{{stats.pendingTasks}}</h3>
+          <p class="text-muted mb-0">Pending</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <i class="bi bi-exclamation-triangle text-danger fs-1 mb-2"></i>
+          <h3 class="fw-bold">{{stats.overdueTasks}}</h3>
+          <p class="text-muted mb-0">Overdue</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <h4 class="fw-bold mb-3">Quick Actions</h4>
+      <div class="d-flex gap-3 flex-wrap">
+        <a routerLink="/task-list" class="btn btn-primary">
+          <i class="bi bi-plus-circle me-2"></i>New Task
+        </a>
+        <a routerLink="/projects" class="btn btn-outline-primary">
+          <i class="bi bi-folder me-2"></i>View Projects
+        </a>
+        <a routerLink="/calendar" class="btn btn-outline-success">
+          <i class="bi bi-calendar me-2"></i>Calendar
+        </a>
+        <a routerLink="/reports" class="btn btn-outline-info">
+          <i class="bi bi-graph-up me-2"></i>Reports
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weekly Progress & Activity -->
+  <div class="row mb-5">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0">
+          <h5 class="fw-bold mb-0">Weekly Progress</h5>
+        </div>
+        <div class="card-body">
+          <div class="row text-center">
+            @for(day of weeklyProgress; track day.day) {
+            <div class="col">
+              <div class="mb-2">
+                <small class="text-muted fw-semibold">{{day.day}}</small>
+              </div>
+              <div class="progress" style="height: 60px; width: 20px; margin: 0 auto;">
+                <div class="progress-bar bg-success" [style.height.%]="(day.completed / (day.completed + day.pending)) * 100" 
+                     data-bs-toggle="tooltip" [title]="day.completed + ' completed'">
+                </div>
+              </div>
+              <div class="mt-2">
+                <small class="text-success fw-bold">{{day.completed}}</small>
+                <small class="text-muted">/{{day.completed + day.pending}}</small>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0">
+          <h5 class="fw-bold mb-0">Productivity</h5>
+        </div>
+        <div class="card-body text-center">
+          <div class="mb-3">
+            <div class="progress mx-auto" style="width: 120px; height: 120px; border-radius: 50%;">
+              <div class="progress-bar bg-primary" [style.width.%]="completionRate" 
+                   style="border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <span class="text-white fw-bold">{{completionRate}}%</span>
+              </div>
+            </div>
+          </div>
+          <h6 class="fw-bold">Completion Rate</h6>
+          <div class="d-flex align-items-center justify-content-center">
+            <i class="bi" [class]="'bi-arrow-' + productivityTrend" 
+               [class.text-success]="productivityTrend === 'up'"
+               [class.text-danger]="productivityTrend === 'down'"></i>
+            <span class="ms-1 small text-muted">vs last week</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity & Upcoming Deadlines -->
+  <div class="row mb-5">
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0">
+          <h5 class="fw-bold mb-0">Recent Activity</h5>
+        </div>
+        <div class="card-body">
+          @for(activity of recentActivity; track activity.action) {
+          <div class="d-flex align-items-start mb-3">
+            <div class="me-3">
+              <i class="bi" [class]="'bi-' + activity.icon" 
+                 [class]="'text-' + activity.color"></i>
+            </div>
+            <div class="flex-grow-1">
+              <p class="mb-1">{{activity.action}}</p>
+              <small class="text-muted">{{activity.time}}</small>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0">
+          <h5 class="fw-bold mb-0">Upcoming Deadlines</h5>
+        </div>
+        <div class="card-body">
+          @for(deadline of upcomingDeadlines; track deadline.task) {
+          <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light rounded">
+            <div>
+              <h6 class="mb-1">{{deadline.task}}</h6>
+              <small class="text-muted">{{deadline.date}}</small>
+            </div>
+            <span class="badge" [class]="deadline.priority === 'High' ? 'bg-danger' : deadline.priority === 'Medium' ? 'bg-warning' : 'bg-secondary'">
+              {{deadline.priority}}
+            </span>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Tasks -->
+  <div class="row">
+    <div class="col-12">
+      <h4 class="fw-bold mb-3">Recent Tasks</h4>
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Task</th>
+                  <th>Status</th>
+                  <th>Priority</th>
+                  <th>Due Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for(task of recentTasks; track task.id) {
+                <tr>
+                  <td>{{task.title}}</td>
+                  <td>
+                    <span class="badge" [class]="task.status === 'Completed' ? 'bg-success' : 'bg-warning'">
+                      {{task.status}}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge" [class]="task.priority === 'High' ? 'bg-danger' : task.priority === 'Medium' ? 'bg-warning' : 'bg-secondary'">
+                      {{task.priority}}
+                    </span>
+                  </td>
+                  <td>
+                    <small class="text-muted">{{task.dueDate}}</small>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">View</button>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
