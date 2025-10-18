@@ -14,7 +14,6 @@ export class LoginService extends BaseService {
   login(formData: any) {
     return this.post(formData, 'login').pipe(
       map((response) => {
-        debugger;
         this.commonService.saveDataInLocalStorage('userToken', response?.token);
         this.commonService.saveDataInLocalStorage('userDetails', response?.user);
       }),
