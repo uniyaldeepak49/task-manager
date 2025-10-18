@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, SlicePipe } from '@angular/common';
 import { TaskItem } from './task-item/task-item';
@@ -6,7 +6,6 @@ import { Task, Status } from '../../interfaces/task';
 import { TaskService } from '../../services/task-service';
 import { AddNewTaskReactiveForms } from '../add-new-task-reactive-forms/add-new-task-reactive-forms';
 import { CommonService } from '../../services/common-service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, of, Subscription, take } from 'rxjs';
 import { FilterTaskPipe } from '../../pipes/filter-task-pipe';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -22,18 +21,15 @@ interface TaskState {
   styleUrls: ['./task-list.css'],
 })
 export class TaskList {
-  taskTitle: string = 'Task title 1';
   taskStatus = Status;
   searchTerm = '';
   // Pagination properties
   currentPage = 1;
   itemsPerPage = 2;
-
   Math = Math;
 
   private taskService = inject(TaskService);
   private commonService = inject(CommonService);
-  subscription: Subscription = Subscription.EMPTY;
   tasks = signal<Task[]>([]);
   isTasksLoaded = signal<boolean>(false);
   task = signal<Task | null>(null);
@@ -58,14 +54,9 @@ export class TaskList {
   taskStateSignal = toSignal<TaskState>(this.taskState$);
 
   constructor() {
-    let prevJson = '';
     effect(() => {
       const state = this.taskStateSignal();
-      const incoming = JSON.stringify(state?.data ?? []);
-
       this.tasks.set(state?.data || []);
-
-      // this.commonService.saveDataInLocalStorage('tasks', this.tasks());
       this.isTasksLoaded.set(state?.loading as boolean);
     });
   }
