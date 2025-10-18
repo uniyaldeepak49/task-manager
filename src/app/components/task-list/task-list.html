@@ -11,17 +11,11 @@
     <!-- Task Form -->
     <div class="col-lg-4">
       <div class="sticky-top" style="top: 100px">
-        @if(id > 0){
         <code-for-beginners-add-new-task-reactive-forms
+          [task]="task"
           (updateTaskEvent)="onUpdateTask($event)"
-          [tasks]="tasks"
-          [id]="id"
-        ></code-for-beginners-add-new-task-reactive-forms>
-        } @else {
-        <code-for-beginners-add-new-task-reactive-forms
           (addNewTaskEvent)="onAddNewTask($event)"
         ></code-for-beginners-add-new-task-reactive-forms>
-        }
       </div>
     </div>
 
@@ -31,7 +25,7 @@
         <div class="card-header bg-white border-0 py-3">
           <div class="d-flex justify-content-between align-items-center">
             <h5 class="fw-bold mb-0"><i class="bi bi-list-task text-primary me-2"></i>Task List</h5>
-            <span class="badge bg-primary rounded-pill">{{ tasks.length }} tasks</span>
+            <span class="badge bg-primary rounded-pill">{{ tasks().length }} tasks</span>
           </div>
         </div>
 
@@ -65,8 +59,8 @@
                 </tr>
               </thead>
               <tbody>
-                @if(tasks.length){ @for(task of paginatedTasks | filterTask: searchTerm: 'title';
-                track task.id){
+                @if(tasks().length){ @for(task of getPaginatedTasks() | filterTask: searchTerm:
+                'title'; track task.id){
                 <tr
                   code-for-beginners-task-item
                   [class.completed]="task.status === taskStatus.COMPLETED"
@@ -76,7 +70,7 @@
                   (onEditTaskEvent)="onEditTask($event)"
                   class="border-0"
                 ></tr>
-                } } @else { @if(!isTasksLoaded){
+                } } @else { @if(!isTasksLoaded()){
                 <tr>
                   <td colspan="6" class="text-center py-5 border-0">
                     <div class="d-flex flex-column align-items-center">
@@ -103,28 +97,41 @@
           </div>
 
           <!-- Pagination -->
-          @if(totalPages > 1) {
+          @if(totalPages() >= 1) {
           <div class="card-footer bg-light border-top py-3">
             <div class="row align-items-center">
               <div class="col-md-6">
                 <small class="text-muted">
                   Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
-                  {{ Math.min(currentPage * itemsPerPage, tasks.length) }} of {{ tasks.length }} tasks
+                  {{ Math.min(currentPage * itemsPerPage, tasks.length) }} of
+                  {{ tasks().length }} tasks
                 </small>
               </div>
               <div class="col-md-6">
                 <nav class="d-flex justify-content-end">
                   <ul class="pagination pagination-sm mb-0">
                     <li class="page-item" [class.disabled]="currentPage === 1">
-                      <a class="page-link" (click)="goToPage(currentPage - 1)" style="cursor: pointer;">Previous</a>
+                      <a
+                        class="page-link"
+                        (click)="goToPage(currentPage - 1)"
+                        style="cursor: pointer"
+                        >Previous</a
+                      >
                     </li>
-                    @for(page of pageNumbers; track page) {
+                    @for(page of pageNumbers(); track page) {
                     <li class="page-item" [class.active]="page === currentPage">
-                      <a class="page-link" (click)="goToPage(page)" style="cursor: pointer;">{{ page }}</a>
+                      <a class="page-link" (click)="goToPage(page)" style="cursor: pointer">{{
+                        page
+                      }}</a>
                     </li>
                     }
-                    <li class="page-item" [class.disabled]="currentPage === totalPages">
-                      <a class="page-link" (click)="goToPage(currentPage + 1)" style="cursor: pointer;">Next</a>
+                    <li class="page-item" [class.disabled]="currentPage === totalPages()">
+                      <a
+                        class="page-link"
+                        (click)="goToPage(currentPage + 1)"
+                        style="cursor: pointer"
+                        >Next</a
+                      >
                     </li>
                   </ul>
                 </nav>
