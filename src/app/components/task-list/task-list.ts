@@ -57,7 +57,7 @@ export class TaskList {
     effect(() => {
       const state = this.taskStateSignal();
       this.tasks.set(state?.data || []);
-      this.isTasksLoaded.set(state?.loading as boolean);
+      this.isTasksLoaded.set(true);
     });
   }
 
@@ -102,10 +102,14 @@ export class TaskList {
   onUpdateTask(task: Task): void {
     let toUpdateTask: Task | undefined = this.tasks().find((t: Task) => t.id === task.id);
     toUpdateTask = task as Task;
-
-    this.tasks.update((list) => list.map((t) => (t.id === task.id ? { ...task } : t)));
-
-    console.log('Task list after update', this.tasks());
+    this.tasks.set(
+      this.tasks().map((t) => {
+        if (t.id === task.id) {
+          t = task;
+        }
+        return t;
+      })
+    );
     this.commonService.saveDataInLocalStorage('tasks', this.tasks());
     this.task.set(null);
   }

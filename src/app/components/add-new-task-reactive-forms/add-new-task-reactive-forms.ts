@@ -38,7 +38,10 @@ export class AddNewTaskReactiveForms {
         // Populate values
         this.taskFormGroup.setValue(this.task()() as Task);
       } else {
-        this.taskFormGroup.reset();
+        debugger;
+        if (!this.taskFormGroup.pristine) {
+          this.taskFormGroup.reset();
+        }
       }
     });
   }
