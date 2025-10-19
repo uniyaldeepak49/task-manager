@@ -1,4 +1,7 @@
-.completed {
-  background-color: lightgreen;
+table tr.completed {
+  background: lightgreen;
   color: #ffffff;
+}
+table {
+  --bs-table-bg: unset;
 }

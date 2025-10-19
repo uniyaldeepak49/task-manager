@@ -1,19 +1,16 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './shared/components/header/header';
-import { AuthService } from './services/auth-service';
-import { AsyncPipe } from '@angular/common';
+import { Footer } from './shared/components/footer/footer';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header],
+  imports: [RouterOutlet, Header, Footer],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('task-manager');
-  // private authService = inject(AuthService);
-  // isLoggedIn$ = this.authService.isLoggedIn$;
 
   constructor() {}
 }

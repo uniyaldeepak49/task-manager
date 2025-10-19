@@ -1,0 +1,121 @@
+<div class="container py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="fw-bold">Reports & Analytics</h2>
+      <p class="text-muted">Track your productivity and performance metrics</p>
+    </div>
+  </div>
+
+  <!-- Productivity Metrics -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <h3 class="fw-bold text-primary">{{productivityData.thisWeek}}%</h3>
+          <p class="text-muted mb-1">This Week</p>
+          <small class="text-success">
+            <i class="bi bi-arrow-up"></i> +{{productivityData.thisWeek - productivityData.lastWeek}}%
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <h3 class="fw-bold text-info">{{productivityData.thisMonth}}%</h3>
+          <p class="text-muted mb-1">This Month</p>
+          <small class="text-success">
+            <i class="bi bi-arrow-up"></i> +{{productivityData.thisMonth - productivityData.lastMonth}}%
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <h3 class="fw-bold text-warning">24</h3>
+          <p class="text-muted mb-1">Avg Tasks/Week</p>
+          <small class="text-success">
+            <i class="bi bi-arrow-up"></i> +3
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <h3 class="fw-bold text-success">2.5h</h3>
+          <p class="text-muted mb-1">Avg Time/Task</p>
+          <small class="text-danger">
+            <i class="bi bi-arrow-down"></i> -0.3h
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Task Distribution -->
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-transparent">
+          <h5 class="fw-bold mb-0">Task Distribution</h5>
+        </div>
+        <div class="card-body">
+          @for(item of tasksByStatus; track item.status) {
+          <div class="mb-3">
+            <div class="d-flex justify-content-between mb-1">
+              <span>{{item.status}}</span>
+              <span class="fw-bold">{{item.count}} ({{item.percentage}}%)</span>
+            </div>
+            <div class="progress" style="height: 8px;">
+              <div class="progress-bar" 
+                   [class]="item.status === 'Completed' ? 'bg-success' : item.status === 'In Progress' ? 'bg-warning' : 'bg-secondary'"
+                   [style.width.%]="item.percentage">
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Performance Trends -->
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-transparent">
+          <h5 class="fw-bold mb-0">Performance Trends</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-4">
+            <h6 class="text-muted">Weekly Completion Rate</h6>
+            <div class="d-flex align-items-center">
+              <div class="flex-grow-1 me-3">
+                <div class="progress" style="height: 12px;">
+                  <div class="progress-bar bg-success" style="width: 85%"></div>
+                </div>
+              </div>
+              <span class="fw-bold">85%</span>
+            </div>
+          </div>
+          
+          <div class="mb-4">
+            <h6 class="text-muted">Monthly Goal Progress</h6>
+            <div class="d-flex align-items-center">
+              <div class="flex-grow-1 me-3">
+                <div class="progress" style="height: 12px;">
+                  <div class="progress-bar bg-primary" style="width: 72%"></div>
+                </div>
+              </div>
+              <span class="fw-bold">72%</span>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <button class="btn btn-outline-primary btn-sm">View Detailed Report</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

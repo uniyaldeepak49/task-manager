@@ -1,0 +1,97 @@
+<div class="container py-4">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2 class="fw-bold">Calendar</h2>
+      <p class="text-muted">Schedule and track your important deadlines</p>
+    </div>
+    <div class="col-md-4 text-end">
+      <button class="btn btn-primary">
+        <i class="bi bi-plus-circle me-2"></i>Add Event
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold mb-0">{{currentDate | date:'MMMM yyyy'}}</h4>
+            <div class="btn-group">
+              <button class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button class="btn btn-outline-secondary btn-sm">Today</button>
+              <button class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Calendar Grid -->
+          <div class="calendar-grid">
+            <div class="row text-center fw-bold border-bottom pb-2 mb-2">
+              <div class="col">Sun</div>
+              <div class="col">Mon</div>
+              <div class="col">Tue</div>
+              <div class="col">Wed</div>
+              <div class="col">Thu</div>
+              <div class="col">Fri</div>
+              <div class="col">Sat</div>
+            </div>
+            
+            <!-- Calendar Days (simplified) -->
+            <div class="row text-center">
+              <div class="col calendar-day">1</div>
+              <div class="col calendar-day">2</div>
+              <div class="col calendar-day">3</div>
+              <div class="col calendar-day">4</div>
+              <div class="col calendar-day">5</div>
+              <div class="col calendar-day">6</div>
+              <div class="col calendar-day">7</div>
+            </div>
+            <div class="row text-center">
+              <div class="col calendar-day">8</div>
+              <div class="col calendar-day">9</div>
+              <div class="col calendar-day">10</div>
+              <div class="col calendar-day">11</div>
+              <div class="col calendar-day">12</div>
+              <div class="col calendar-day">13</div>
+              <div class="col calendar-day">14</div>
+            </div>
+            <div class="row text-center">
+              <div class="col calendar-day has-event">15</div>
+              <div class="col calendar-day has-event">16</div>
+              <div class="col calendar-day">17</div>
+              <div class="col calendar-day has-event">18</div>
+              <div class="col calendar-day">19</div>
+              <div class="col calendar-day">20</div>
+              <div class="col calendar-day">21</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-transparent">
+          <h5 class="fw-bold mb-0">Upcoming Events</h5>
+        </div>
+        <div class="card-body">
+          @for(event of events; track event.date) {
+          <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
+            <div class="me-3">
+              <i class="bi bi-calendar-event text-primary"></i>
+            </div>
+            <div class="flex-grow-1">
+              <h6 class="mb-1">{{event.title}}</h6>
+              <small class="text-muted">{{event.date}} at {{event.time}}</small>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,6 @@
 ul li {
   list-style-type: none;
+  color: #ffffff;
 }
 
 ul {
@@ -14,5 +15,9 @@ ul {
 }
 
 .active {
-  color: blue;
+  color: orange !important;
+}
+li.nav-item a {
+  color: #ffffff;
+  font-size: 1rem;
 }

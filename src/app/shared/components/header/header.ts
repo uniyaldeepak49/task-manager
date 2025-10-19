@@ -18,6 +18,6 @@ export class Header {
   onLogout(): void {
     this.commonService.clearLocalStorage();
     this.authService.userLoginToken.next(false);
-    this.router.navigate(['/sign-in']);
+    this.router.navigate(['/home']);
   }
 }

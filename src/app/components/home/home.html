@@ -1,36 +1,54 @@
-<div class="home">
-  <h2>Welcome to the ToDo Application in Angular</h2>
+<div class="home-container">
+  <!-- Main Hero Section -->
+  <section class="hero-section text-center py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <h1 class="display-3 fw-bold text-dark mb-4">Stay Organized</h1>
+          <p class="lead text-muted mb-5">
+            Manage your tasks efficiently with our simple and powerful task manager
+          </p>
+          @if(!(loggedIn$ | async)) {
+          <div class="d-flex gap-3 justify-content-center">
+            <a routerLink="/sign-in" class="btn btn-primary btn-lg px-5">Sign In</a>
+            <a routerLink="/sign-up" class="btn btn-outline-primary btn-lg px-5">Sign Up</a>
+          </div>
+          } @else {
+          <div class="d-flex gap-3 justify-content-center">
+            <a routerLink="/dashboard" class="btn btn-primary btn-lg px-5">Go to Dashboard</a>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <p>
-    This Application is fully developed in Angular 20 with new concepts and below are the
-    features/concepts we have done so far
-  </p>
-
-  <ul>
-    <li>
-      <h3>Part 1 (Project Setup and First component)</h3>
-      <ul>
-        <li>Install Angular CLI</li>
-        <li>Create a new project</li>
-        <li>Generate First component</li>
-      </ul>
-    </li>
-
-    <li>
-      <h3>Part 2 (Templates and Data Binding)</h3>
-      <ul>
-        <li>Install Angular CLI</li>
-        <li>Create a new project</li>
-        <li>Generate First component</li>
-      </ul>
-    </li>
-    <li>
-      <h3>Part 3 (Directives)</h3>
-      <ul>
-        <li>Install Angular CLI</li>
-        <li>Create a new project</li>
-        <li>Generate First component</li>
-      </ul>
-    </li>
-  </ul>
+  <!-- Features Section -->
+  <section class="features-section py-5 bg-light">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4 text-center fade-in-up-1">
+          <div class="feature-icon mb-3">
+            <i class="bi bi-list-check text-primary"></i>
+          </div>
+          <h4>Simple Task Management</h4>
+          <p class="text-muted">Create and organize your tasks with ease</p>
+        </div>
+        <div class="col-md-4 text-center fade-in-up-2">
+          <div class="feature-icon mb-3">
+            <i class="bi bi-shield-lock text-success"></i>
+          </div>
+          <h4>Secure & Private</h4>
+          <p class="text-muted">Your data is protected and secure</p>
+        </div>
+        <div class="col-md-4 text-center fade-in-up-3">
+          <div class="feature-icon mb-3">
+            <i class="bi bi-lightning text-warning"></i>
+          </div>
+          <h4>Fast & Reliable</h4>
+          <p class="text-muted">Built with modern technology for speed</p>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>

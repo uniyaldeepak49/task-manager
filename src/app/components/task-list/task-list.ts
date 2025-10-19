@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, SlicePipe } from '@angular/common';
 import { TaskItem } from './task-item/task-item';
@@ -6,46 +6,58 @@ import { Task, Status } from '../../interfaces/task';
 import { TaskService } from '../../services/task-service';
 import { AddNewTaskReactiveForms } from '../add-new-task-reactive-forms/add-new-task-reactive-forms';
 import { CommonService } from '../../services/common-service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import { catchError, map, Observable, of, Subscription, take } from 'rxjs';
 import { FilterTaskPipe } from '../../pipes/filter-task-pipe';
-
+import { toSignal } from '@angular/core/rxjs-interop';
+interface TaskState {
+  loading: boolean;
+  data: Task[];
+  error: string | null;
+}
 @Component({
   selector: 'code-for-beginners-task-list',
   imports: [CommonModule, FormsModule, TaskItem, AddNewTaskReactiveForms, FilterTaskPipe],
   templateUrl: './task-list.html',
   styleUrls: ['./task-list.css'],
 })
-export class TaskList implements OnInit, OnDestroy {
-  taskTitle: string = 'Task title 1';
-  tasks: Task[] = [];
+export class TaskList {
   taskStatus = Status;
-  id: number = 0;
-  isTasksLoaded = false;
   searchTerm = '';
+  // Pagination properties
+  currentPage = 1;
+  itemsPerPage = 2;
+  Math = Math;
 
   private taskService = inject(TaskService);
   private commonService = inject(CommonService);
-  subscription: Subscription = Subscription.EMPTY;
-  // private taskService: TaskService
-  // @Inject(TaskService) private taskService: TaskService;
+  tasks = signal<Task[]>([]);
+  isTasksLoaded = signal<boolean>(false);
+  task = signal<Task | null>(null);
+  taskState$ = this.taskService.getTasks().pipe(
+    take(1),
+    map(
+      (tasks: Task[]): TaskState => ({
+        loading: false,
+        data: tasks,
+        error: null,
+      })
+    ),
+    catchError(
+      (err): Observable<TaskState> =>
+        of({
+          loading: false,
+          data: [],
+          error: err?.message || String(err),
+        })
+    )
+  );
+  taskStateSignal = toSignal<TaskState>(this.taskState$);
 
-  ngOnInit(): void {
-    this.getTasks();
-  }
-  /**
-   * Returns tasks list from service.
-   */
-  getTasks(): void {
-    this.subscription = this.taskService.getTasks().subscribe({
-      next: (tasks: Task[]) => {
-        this.isTasksLoaded = true;
-        this.tasks = tasks;
-        this.commonService.saveDataInLocalStorage('tasks', this.tasks);
-      },
-      error: (error: HttpErrorResponse) => {
-        throw new Error('Error from tasks API', error.error);
-      },
+  constructor() {
+    effect(() => {
+      const state = this.taskStateSignal();
+      this.tasks.set(state?.data || []);
+      this.isTasksLoaded.set(true);
     });
   }
 
@@ -55,8 +67,8 @@ export class TaskList implements OnInit, OnDestroy {
    * @returns {void}
    */
   onDeleteTask(id: number): void {
-    this.tasks = this.taskService.deleteTask(this.tasks, id);
-    this.commonService.saveDataInLocalStorage('tasks', this.tasks);
+    this.tasks.set(this.taskService.deleteTask(this.tasks(), id));
+    this.commonService.saveDataInLocalStorage('tasks', this.tasks());
   }
   /**
    * On Change mark task completed.
@@ -73,8 +85,8 @@ export class TaskList implements OnInit, OnDestroy {
   onAddNewTask(newTask: Task): void {
     const id: number = this.getIncrementedId();
     newTask.id = id;
-    this.tasks = [...this.tasks, newTask];
-    this.commonService.saveDataInLocalStorage('tasks', this.tasks);
+    this.tasks.set([...this.tasks(), newTask]);
+    this.commonService.saveDataInLocalStorage('tasks', this.tasks());
   }
 
   /**
@@ -82,36 +94,48 @@ export class TaskList implements OnInit, OnDestroy {
    * @returns {number}
    */
   getIncrementedId(): number {
-    return this.tasks.length ? Math.max(...this.tasks.map((task) => task.id)) + 1 : 1;
-    // let id: number = 0;
-    // if (this.tasks.length) {
-    //   id = Math.max(...this.tasks.map((task) => task.id)) + 1; // [1,2,3,4,5] ==> 1,2,3,4,5
-    // } else {
-    //   id = 1;
-    // }
-
-    // return id;
+    return this.tasks().length ? Math.max(...this.tasks().map((task) => task.id)) + 1 : 1;
   }
   onEditTask(id: number): void {
-    this.id = id;
+    this.task.set(this.tasks()?.find((task) => task.id === id) as Task);
   }
   onUpdateTask(task: Task): void {
-    let toUpdateTask: Task | undefined = this.tasks.find((t: Task) => t.id === task.id);
+    let toUpdateTask: Task | undefined = this.tasks().find((t: Task) => t.id === task.id);
     toUpdateTask = task as Task;
-    this.tasks = this.tasks.map((t) => {
-      if (t.id === task.id) {
-        t = task;
-      }
-      return t;
-    });
-    this.commonService.saveDataInLocalStorage('tasks', this.tasks);
-
-    this.id = 0;
+    this.tasks.set(
+      this.tasks().map((t) => {
+        if (t.id === task.id) {
+          t = task;
+        }
+        return t;
+      })
+    );
+    this.commonService.saveDataInLocalStorage('tasks', this.tasks());
+    this.task.set(null);
   }
 
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+  readonly getPaginatedTasks = computed(() => {
+    console.log('Tasks', this.tasks());
+
+    const filteredTasks = this.tasks().filter((task) =>
+      task.description.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return filteredTasks.slice(startIndex, startIndex + this.itemsPerPage);
+  });
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage = page;
     }
   }
+
+  readonly totalPages = computed(() => {
+    const filteredTasks = this.tasks().filter((task) =>
+      task.description.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+    return Math.ceil(filteredTasks.length / this.itemsPerPage);
+  });
+
+  readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
 }

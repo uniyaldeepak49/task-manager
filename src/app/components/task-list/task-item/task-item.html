@@ -1,28 +1,27 @@
-<td>
-  <input type="checkbox" (change)="onTaskComplete(task())" />
+<td class="ps-3">
+  <input type="checkbox" class="form-check-input" (change)="onTaskComplete(task())" />
 </td>
-<td>
-  {{ task().id }}
+<td class="fw-semibold text-muted">
+  #{{ task().id }}
 </td>
-
-<!-- title Column -->
-
-<td>
+<td class="fw-semibold">
   {{ task().title | capitalize }}
 </td>
-
-<!-- description Column -->
-
-<td>
+<td class="text-muted">
   {{ task().description | capitalize }}
 </td>
-
-<!-- status Column -->
-
 <td>
-  {{ task().status | capitalize }}
+  <span class="badge" [class]="task().status === 'Completed' ? 'bg-success' : 'bg-warning text-dark'">
+    {{ task().status | capitalize }}
+  </span>
 </td>
-<td>
-  <button type="button" (click)="onEditTask(task().id)">Edit</button> |
-  <button type="button" (click)="onDeleteTask(task().id)">Delete</button>
+<td class="pe-3">
+  <div class="d-flex gap-1">
+    <button type="button" class="btn btn-sm btn-outline-primary" (click)="onEditTask(task().id)">
+      Edit
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-danger" (click)="onDeleteTask(task().id)">
+      Delete
+    </button>
+  </div>
 </td>

@@ -1,50 +1,59 @@
-<div class="row mt-5">
-  <div class="col-md-12">
-    <div class="card">
-      <div class="card-header text-center">
-        Please enter your basic information to register in our application.
-      </div>
-
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-10 offset-1">
-            <div class="card-title fw-bold">Sign Up (All the fields are necessary.)</div>
+<div class="container-fluid bg-light min-vh-100 d-flex align-items-center py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow border-0">
+          <div class="card-body p-5">
+            <div class="text-center mb-4">
+              <h2 class="fw-bold text-dark mb-2">Create Account</h2>
+              <p class="text-muted">Join us to get started</p>
+            </div>
 
             <form [formGroup]="userRegisterForm">
-              <div class="form-floating mb-3">
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Full Name</label>
                 <input
                   type="text"
-                  placeholder="Enter an Name"
                   class="form-control"
                   formControlName="name"
+                  placeholder="Enter your full name"
                 />
-                <label>Name:</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Email Address</label>
                 <input
-                  type="text"
-                  placeholder="Enter an Email"
+                  type="email"
                   class="form-control"
                   formControlName="email"
+                  placeholder="Enter your email"
                 />
-                <label>Email:</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Contact Number</label>
                 <input
-                  type="text"
-                  placeholder="Enter Contact No."
+                  type="tel"
                   class="form-control"
                   formControlName="contact_no"
+                  placeholder="Enter your phone number"
                 />
-                <label>Contact No:</label>
               </div>
 
-              <div class="pt-3">
-                <button type="button" class="btn btn-primary">Sign Up</button>
+              <button
+                type="submit"
+                class="btn btn-primary w-100 mb-3"
+                [disabled]="userRegisterForm.invalid"
+              >
+                Create Account
+              </button>
+
+              <div class="text-center">
+                <span class="text-muted">Already have an account? </span>
+                <a routerLink="/sign-in" class="text-primary text-decoration-none fw-semibold"
+                  >Sign in</a
+                >
               </div>
-              <div class="pt-1"><a routerLink="/sign-in">Sign In</a></div>
             </form>
           </div>
         </div>

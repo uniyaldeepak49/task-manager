@@ -1,81 +1,146 @@
-<div class="row mt-5">
-  <!--Template Driven form-->
-  <!-- <code-for-beginners-add-new-task-template-driven></code-for-beginners-add-new-task-template-driven> -->
-
-  <div class="col-md-6 offset-3">
-    @if(id > 0){
-    <code-for-beginners-add-new-task-reactive-forms
-      (updateTaskEvent)="onUpdateTask($event)"
-      [tasks]="tasks"
-      [id]="id"
-    ></code-for-beginners-add-new-task-reactive-forms>
-    } @else {
-    <code-for-beginners-add-new-task-reactive-forms
-      (addNewTaskEvent)="onAddNewTask($event)"
-    ></code-for-beginners-add-new-task-reactive-forms>
-    }
+<div class="container py-4">
+  <!-- Page Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="fw-bold mb-2">Task Management</h2>
+      <p class="text-muted">Create, organize, and track your tasks efficiently</p>
+    </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-md-6 offset-3">
-    <div class="card mt-3 mb-3">
-      <div class="card-body">
-        <input
-          type="text"
-          [(ngModel)]="searchTerm"
-          placeholder="Search task"
-          class="form-control"
-        />
+  <div class="row g-4">
+    <!-- Task Form -->
+    <div class="col-lg-4">
+      <div class="sticky-top" style="top: 100px">
+        <code-for-beginners-add-new-task-reactive-forms
+          [task]="task"
+          (updateTaskEvent)="onUpdateTask($event)"
+          (addNewTaskEvent)="onAddNewTask($event)"
+        ></code-for-beginners-add-new-task-reactive-forms>
+      </div>
+    </div>
+
+    <!-- Task List -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 py-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0"><i class="bi bi-list-task text-primary me-2"></i>Task List</h5>
+            <span class="badge bg-primary rounded-pill">{{ tasks().length }} tasks</span>
+          </div>
+        </div>
+
+        <div class="card-body p-0">
+          <!-- Search Bar -->
+          <div class="p-3 border-bottom bg-light">
+            <div class="input-group">
+              <span class="input-group-text bg-white border-end-0">
+                <i class="bi bi-search text-muted"></i>
+              </span>
+              <input
+                type="text"
+                [(ngModel)]="searchTerm"
+                placeholder="Search tasks by description..."
+                class="form-control border-start-0 ps-0"
+              />
+            </div>
+          </div>
+
+          <!-- Task Table -->
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th class="border-0 ps-3" width="50"></th>
+                  <th class="border-0" width="60">ID</th>
+                  <th class="border-0">Title</th>
+                  <th class="border-0">Description</th>
+                  <th class="border-0" width="120">Status</th>
+                  <th class="border-0 pe-3" width="120">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if(tasks().length){ @for(task of getPaginatedTasks() | filterTask: searchTerm:
+                'title'; track task.id){
+                <tr
+                  code-for-beginners-task-item
+                  [class.completed]="task.status === taskStatus.COMPLETED"
+                  [task]="task"
+                  (onTaskCompleteEvent)="onTaskComplete($event)"
+                  (onDeleteTaskEvent)="onDeleteTask($event)"
+                  (onEditTaskEvent)="onEditTask($event)"
+                  class="border-0"
+                ></tr>
+                } } @else { @if(!isTasksLoaded()){
+                <tr>
+                  <td colspan="6" class="text-center py-5 border-0">
+                    <div class="d-flex flex-column align-items-center">
+                      <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                      <p class="text-muted mb-0">Loading your tasks...</p>
+                    </div>
+                  </td>
+                </tr>
+                } @else {
+                <tr>
+                  <td colspan="6" class="text-center py-5 border-0">
+                    <div class="d-flex flex-column align-items-center">
+                      <i class="bi bi-inbox text-muted" style="font-size: 3rem"></i>
+                      <h5 class="text-muted mt-3 mb-2">No tasks found</h5>
+                      <p class="text-muted mb-0">Create your first task to get started!</p>
+                    </div>
+                  </td>
+                </tr>
+                } }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          @if(totalPages() >= 1) {
+          <div class="card-footer bg-light border-top py-3">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <small class="text-muted">
+                  Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
+                  {{ Math.min(currentPage * itemsPerPage, tasks.length) }} of
+                  {{ tasks().length }} tasks
+                </small>
+              </div>
+              <div class="col-md-6">
+                <nav class="d-flex justify-content-end">
+                  <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                      <a
+                        class="page-link"
+                        (click)="goToPage(currentPage - 1)"
+                        style="cursor: pointer"
+                        >Previous</a
+                      >
+                    </li>
+                    @for(page of pageNumbers(); track page) {
+                    <li class="page-item" [class.active]="page === currentPage">
+                      <a class="page-link" (click)="goToPage(page)" style="cursor: pointer">{{
+                        page
+                      }}</a>
+                    </li>
+                    }
+                    <li class="page-item" [class.disabled]="currentPage === totalPages()">
+                      <a
+                        class="page-link"
+                        (click)="goToPage(currentPage + 1)"
+                        style="cursor: pointer"
+                        >Next</a
+                      >
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-<div>
-  <table class="table table-bordered table-striped table-hover">
-    <thead>
-      <tr>
-        <th></th>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      @if(tasks.length){ @for(task of tasks | filterTask: searchTerm:'description'; track task.id){
-
-      <!-- ID Column -->
-      <!--[ngStyle]="{ 'background-color': task.status === 'Completed' ? 'lightgreen' : 'white' }-->
-      <!-- [ngClass]="{ completed: task.status === 'Completed' }" -->
-      <!-- [style.background-color]="task.status === 'Completed' ? 'lightgreen' : ''" -->
-
-      <!-- [task]="task" is called as Input property Binding -->
-      <!-- (onTaskCompleteEvent)="onTaskComplete($event)" is called as Output property Binding -->
-      <tr
-        code-for-beginners-task-item
-        [class.completed]="task.status === taskStatus.COMPLETED"
-        [task]="task"
-        (onTaskCompleteEvent)="onTaskComplete($event)"
-        (onDeleteTaskEvent)="onDeleteTask($event)"
-        (onEditTaskEvent)="onEditTask($event)"
-      ></tr>
-
-      } } @else { @if(!isTasksLoaded){
-      <tr align="center">
-        <td colspan="6">
-          <div>Data is loading</div>
-        </td>
-      </tr>
-      } @else {
-      <tr align="center">
-        <td colspan="6">
-          <div>No Data found</div>
-        </td>
-      </tr>
-      } }
-    </tbody>
-  </table>
 </div>

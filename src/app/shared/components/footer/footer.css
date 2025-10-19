@@ -1,0 +1,18 @@
+.footer {
+  width: 100%;
+  border-top: 1px solid #dee2e6;
+  margin-top: auto;
+}
+
+.footer h5 {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.footer p {
+  color: #ced4da;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}

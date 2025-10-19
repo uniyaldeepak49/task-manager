@@ -1,4 +1,4 @@
-import { Component, input, OnInit, output } from '@angular/core';
+import { Component, effect, input, OnInit, output, signal, Signal } from '@angular/core';
 import {
   FormControl,
   ReactiveFormsModule,
@@ -15,17 +15,11 @@ import { CommonModule } from '@angular/common';
   templateUrl: './add-new-task-reactive-forms.html',
   styleUrl: './add-new-task-reactive-forms.css',
 })
-export class AddNewTaskReactiveForms implements OnInit {
-  readonly id = input<number>();
-  readonly tasks = input<Task[]>();
+export class AddNewTaskReactiveForms {
+  readonly task = input<Signal<Task | null>>(signal(null));
   readonly reset = input<boolean>();
+  readonly id = signal<number>(0);
 
-  task: Task = {
-    id: 0,
-    title: '',
-    description: '',
-    status: Status.PENDING,
-  };
   taskFormGroup: UntypedFormGroup = new UntypedFormGroup({
     id: new FormControl(0),
     title: new UntypedFormControl('', [Validators.required, Validators.minLength(3)]),
@@ -36,12 +30,20 @@ export class AddNewTaskReactiveForms implements OnInit {
   addNewTaskEvent = output<Task>();
   updateTaskEvent = output<Task>();
 
-  ngOnInit(): void {
-    if (this.id()) {
-      // Editable is required
-      const task: Task | undefined = this.tasks()?.find((task: Task) => task.id === this.id());
-      this.taskFormGroup.setValue(task as Task);
-    }
+  constructor() {
+    effect(() => {
+      this.id.set(this.task()()?.id ?? 0);
+
+      if (this.id()) {
+        // Populate values
+        this.taskFormGroup.setValue(this.task()() as Task);
+      } else {
+        debugger;
+        if (!this.taskFormGroup.pristine) {
+          this.taskFormGroup.reset();
+        }
+      }
+    });
   }
 
   get form() {
