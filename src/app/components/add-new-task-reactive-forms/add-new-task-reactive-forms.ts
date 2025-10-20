@@ -44,7 +44,6 @@ export class AddNewTaskReactiveForms {
       }
     });
   }
-
   /**
    * On Submit task form.
    * @param taskForm
