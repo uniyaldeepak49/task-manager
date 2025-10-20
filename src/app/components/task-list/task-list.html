@@ -33,14 +33,11 @@
           <!-- Search Bar -->
           <div class="p-3 border-bottom bg-light">
             <div class="input-group">
-              <span class="input-group-text bg-white border-end-0">
-                <i class="bi bi-search text-muted"></i>
-              </span>
               <input
                 type="text"
                 [(ngModel)]="searchTerm"
                 placeholder="Search tasks by description..."
-                class="form-control border-start-0 ps-0"
+                class="form-control border-start-0"
               />
             </div>
           </div>
@@ -59,7 +56,7 @@
                 </tr>
               </thead>
               <tbody>
-                @if(tasks().length){ @for(task of getPaginatedTasks() | filterTask: searchTerm:
+                @if(tasks().length){ @for(task of getPaginatedTasks() | filterTask: searchTerm():
                 'title'; track task.id){
                 <tr
                   code-for-beginners-task-item
@@ -102,33 +99,33 @@
             <div class="row align-items-center">
               <div class="col-md-6">
                 <small class="text-muted">
-                  Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
-                  {{ Math.min(currentPage * itemsPerPage, tasks.length) }} of
+                  Showing {{ (currentPage() - 1) * itemsPerPage() + 1 }} to
+                  {{ Math.min(currentPage() * itemsPerPage(), tasks().length) }} of
                   {{ tasks().length }} tasks
                 </small>
               </div>
               <div class="col-md-6">
                 <nav class="d-flex justify-content-end">
                   <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item" [class.disabled]="currentPage === 1">
+                    <li class="page-item" [class.disabled]="currentPage() === 1">
                       <a
                         class="page-link"
-                        (click)="goToPage(currentPage - 1)"
+                        (click)="goToPage(currentPage() - 1)"
                         style="cursor: pointer"
                         >Previous</a
                       >
                     </li>
                     @for(page of pageNumbers(); track page) {
-                    <li class="page-item" [class.active]="page === currentPage">
+                    <li class="page-item" [class.active]="page === currentPage()">
                       <a class="page-link" (click)="goToPage(page)" style="cursor: pointer">{{
                         page
                       }}</a>
                     </li>
                     }
-                    <li class="page-item" [class.disabled]="currentPage === totalPages()">
+                    <li class="page-item" [class.disabled]="currentPage() === totalPages()">
                       <a
                         class="page-link"
-                        (click)="goToPage(currentPage + 1)"
+                        (click)="goToPage(currentPage() + 1)"
                         style="cursor: pointer"
                         >Next</a
                       >
