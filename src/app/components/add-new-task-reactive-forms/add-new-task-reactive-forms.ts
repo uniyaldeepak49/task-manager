@@ -45,9 +45,6 @@ export class AddNewTaskReactiveForms {
     });
   }
 
-  get form() {
-    return this.taskFormGroup.controls;
-  }
   /**
    * On Submit task form.
    * @param taskForm
