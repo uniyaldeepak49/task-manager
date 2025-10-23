@@ -1,12 +1,11 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, model, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, SlicePipe } from '@angular/common';
 import { TaskItem } from './task-item/task-item';
 import { Task, Status } from '../../interfaces/task';
 import { TaskService } from '../../services/task-service';
 import { AddNewTaskReactiveForms } from '../add-new-task-reactive-forms/add-new-task-reactive-forms';
 import { CommonService } from '../../services/common-service';
-import { catchError, map, Observable, of, Subscription, take } from 'rxjs';
+import { catchError, map, Observable, of, take } from 'rxjs';
 import { FilterTaskPipe } from '../../pipes/filter-task-pipe';
 import { toSignal } from '@angular/core/rxjs-interop';
 interface TaskState {
@@ -16,16 +15,16 @@ interface TaskState {
 }
 @Component({
   selector: 'code-for-beginners-task-list',
-  imports: [CommonModule, FormsModule, TaskItem, AddNewTaskReactiveForms, FilterTaskPipe],
+  imports: [TaskItem, AddNewTaskReactiveForms, FilterTaskPipe, FormsModule],
   templateUrl: './task-list.html',
   styleUrls: ['./task-list.css'],
 })
 export class TaskList {
   taskStatus = Status;
-  searchTerm = '';
+  searchTerm = model<string>('');
   // Pagination properties
-  currentPage = 1;
-  itemsPerPage = 2;
+  currentPage = signal<number>(1);
+  itemsPerPage = signal<number>(5);
   Math = Math;
 
   private taskService = inject(TaskService);
@@ -57,7 +56,7 @@ export class TaskList {
     effect(() => {
       const state = this.taskStateSignal();
       this.tasks.set(state?.data || []);
-      this.isTasksLoaded.set(true);
+      this.isTasksLoaded.set(state?.loading as boolean);
     });
   }
 
@@ -96,13 +95,14 @@ export class TaskList {
   getIncrementedId(): number {
     return this.tasks().length ? Math.max(...this.tasks().map((task) => task.id)) + 1 : 1;
   }
-  onEditTask(id: number): void {
+  onEditTask = (id: number): void =>
     this.task.set(this.tasks()?.find((task) => task.id === id) as Task);
-  }
-  onUpdateTask(task: Task): void {
-    let toUpdateTask: Task | undefined = this.tasks().find((t: Task) => t.id === task.id);
-    toUpdateTask = task as Task;
-    this.tasks.set(
+  /**
+   * On Update task.
+   * @param task
+   */
+  onUpdateTask = (task: Task): void => {
+    this.tasks.update(() =>
       this.tasks().map((t) => {
         if (t.id === task.id) {
           t = task;
@@ -112,30 +112,23 @@ export class TaskList {
     );
     this.commonService.saveDataInLocalStorage('tasks', this.tasks());
     this.task.set(null);
-  }
-
-  readonly getPaginatedTasks = computed(() => {
-    console.log('Tasks', this.tasks());
-
-    const filteredTasks = this.tasks().filter((task) =>
-      task.description.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    return filteredTasks.slice(startIndex, startIndex + this.itemsPerPage);
+  };
+  readonly getFilteredTasks = computed(() =>
+    this.tasks().filter((task) =>
+      task.description.toLowerCase().includes(this.searchTerm().toLowerCase())
+    )
+  );
+  readonly totalPages = computed((): number =>
+    Math.ceil(this.getFilteredTasks().length / this.itemsPerPage())
+  );
+  readonly getPaginatedTasks = computed((): Task[] => {
+    const startIndex = (this.currentPage() - 1) * this.itemsPerPage();
+    return this.getFilteredTasks().slice(startIndex, startIndex + this.itemsPerPage());
   });
-
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages()) {
-      this.currentPage = page;
+      this.currentPage.set(page);
     }
   }
-
-  readonly totalPages = computed(() => {
-    const filteredTasks = this.tasks().filter((task) =>
-      task.description.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-    return Math.ceil(filteredTasks.length / this.itemsPerPage);
-  });
-
   readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
 }

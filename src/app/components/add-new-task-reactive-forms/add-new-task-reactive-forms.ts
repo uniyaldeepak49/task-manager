@@ -32,22 +32,17 @@ export class AddNewTaskReactiveForms {
 
   constructor() {
     effect(() => {
-      this.id.set(this.task()()?.id ?? 0);
+      this.id.set(this.task()()?.id ? (this.task()()?.id as number) : 0);
 
       if (this.id()) {
         // Populate values
         this.taskFormGroup.setValue(this.task()() as Task);
       } else {
-        debugger;
         if (!this.taskFormGroup.pristine) {
           this.taskFormGroup.reset();
         }
       }
     });
-  }
-
-  get form() {
-    return this.taskFormGroup.controls;
   }
   /**
    * On Submit task form.
