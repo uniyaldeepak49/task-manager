@@ -36,10 +36,6 @@ export class AddNewTaskReactiveForms {
       if (this.id()) {
         // Populate values
         this.taskFormGroup.setValue(this.task()() as Task);
-      } else {
-        if (!this.taskFormGroup.pristine) {
-          this.taskFormGroup.reset();
-        }
       }
     });
   }
@@ -55,6 +51,7 @@ export class AddNewTaskReactiveForms {
         // Fire the edit task event
         this.updateTaskEvent.emit(this.taskFormGroup.value);
       }
+      this.taskFormGroup.reset();
     }
   }
 }
