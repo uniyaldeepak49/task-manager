@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, model, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TaskItem } from './task-item/task-item';
 import { Task, Status } from '../../interfaces/task';
@@ -21,7 +21,7 @@ interface TaskState {
 })
 export class TaskList {
   taskStatus = Status;
-  searchTerm = model<string>('');
+  searchTerm = '';
   // Pagination properties
   currentPage = signal<number>(1);
   itemsPerPage = signal<number>(5);
@@ -65,10 +65,10 @@ export class TaskList {
    * @param id
    * @returns {void}
    */
-  onDeleteTask(id: number): void {
+  onDeleteTask = (id: number): void => {
     this.tasks.set(this.taskService.deleteTask(this.tasks(), id));
     this.commonService.saveDataInLocalStorage('tasks', this.tasks());
-  }
+  };
   /**
    * On Change mark task completed.
    * @param task
@@ -115,7 +115,7 @@ export class TaskList {
   };
   readonly getFilteredTasks = computed(() =>
     this.tasks().filter((task) =>
-      task.description.toLowerCase().includes(this.searchTerm().toLowerCase())
+      task.description.toLowerCase().includes(this.searchTerm.toLowerCase())
     )
   );
   readonly totalPages = computed((): number =>

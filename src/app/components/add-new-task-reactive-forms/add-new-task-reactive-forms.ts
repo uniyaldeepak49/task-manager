@@ -6,7 +6,7 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { Task, Status } from '../../interfaces/task';
+import { Task } from '../../interfaces/task';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -17,7 +17,6 @@ import { CommonModule } from '@angular/common';
 })
 export class AddNewTaskReactiveForms {
   readonly task = input<Signal<Task | null>>(signal(null));
-  readonly reset = input<boolean>();
   readonly id = signal<number>(0);
 
   taskFormGroup: UntypedFormGroup = new UntypedFormGroup({
